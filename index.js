@@ -31,6 +31,7 @@ async function run() {
         const jobNewsCollection = database.collection("Job News");
         const socialCollection = database.collection("Social LInk");
         const eventCollection = database.collection("Events");
+        const interviewCollection = database.collection("Interview")
 
         // App Getting
 
@@ -41,6 +42,12 @@ async function run() {
         });
         app.get('/news', async (req, res) => {
             const query = {};
+            const news = await newsCollection.find(query).toArray();
+            res.send(news);
+        });
+        app.get('/news/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
             const news = await newsCollection.find(query).toArray();
             res.send(news);
         });
@@ -59,6 +66,12 @@ async function run() {
             const jobs = await jobNewsCollection.find(query).toArray();
             res.send(jobs);
         });
+        app.get('/jobs/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const jobs = await jobNewsCollection.find(query).toArray();
+            res.send(jobs);
+        });
         app.get('/social', async (req, res) => {
             const query = {};
             const social = await socialCollection.find(query).toArray();
@@ -68,6 +81,11 @@ async function run() {
             const query = {};
             const events = await eventCollection.find(query).toArray();
             res.send(events);
+        });
+        app.get('/interview', async (req, res) => {
+            const query = {};
+            const interview = await interviewCollection.find(query).toArray();
+            res.send(interview);
         });
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -125,6 +143,11 @@ async function run() {
         app.post('/add-events', async (req, res) => {
             const event = req.body;
             const result = await eventCollection.insertOne(event);
+            res.send(result);
+        });
+        app.post('/add-interview', async (req, res) => {
+            const interview = req.body;
+            const result = await interviewCollection.insertOne(interview);
             res.send(result);
         });
 
@@ -206,6 +229,18 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await socialCollection.deleteOne(query);
+            res.send(result);
+        });
+        app.delete('/delete-event/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await socialCollection.deleteOne(query);
+            res.send(result);
+        });
+        app.delete('/delete-interview/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await interviewCollection.deleteOne(query);
             res.send(result);
         });
 
