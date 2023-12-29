@@ -28,6 +28,9 @@ async function run() {
         const newsCollection = database.collection("News");
         const noticeCollection = database.collection("Notice");
         const sliderCollection = database.collection("Slider");
+        const jobNewsCollection = database.collection("Job News");
+        const socialCollection = database.collection("Social LInk");
+        const eventCollection = database.collection("Events");
 
         // App Getting
 
@@ -51,6 +54,21 @@ async function run() {
             const notice = await noticeCollection.find(query).toArray();
             res.send(notice);
         });
+        app.get('/jobs', async (req, res) => {
+            const query = {};
+            const jobs = await jobNewsCollection.find(query).toArray();
+            res.send(jobs);
+        });
+        app.get('/social', async (req, res) => {
+            const query = {};
+            const social = await socialCollection.find(query).toArray();
+            res.send(social);
+        });
+        app.get('/events', async (req, res) => {
+            const query = {};
+            const events = await eventCollection.find(query).toArray();
+            res.send(events);
+        });
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
@@ -62,7 +80,7 @@ async function run() {
             const query = { email };
             const admin = await userCollection.findOne(query);
             res.send({ isAdmin: admin?.status == 'admin' });
-        })
+        });
 
 
         // App Posting
@@ -92,6 +110,21 @@ async function run() {
         app.post('/add-slide', async (req, res) => {
             const slide = req.body;
             const result = await sliderCollection.insertOne(slide);
+            res.send(result);
+        });
+        app.post('/add-job-news', async (req, res) => {
+            const news = req.body;
+            const result = await jobNewsCollection.insertOne(news);
+            res.send(result);
+        });
+        app.post('/add-social', async (req, res) => {
+            const social = req.body;
+            const result = await socialCollection.insertOne(social);
+            res.send(result);
+        });
+        app.post('/add-events', async (req, res) => {
+            const event = req.body;
+            const result = await eventCollection.insertOne(event);
             res.send(result);
         });
 
@@ -161,6 +194,18 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await sliderCollection.deleteOne(query);
+            res.send(result);
+        });
+        app.delete('/jobs/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await jobNewsCollection.deleteOne(query);
+            res.send(result);
+        });
+        app.delete('/delete-social/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await socialCollection.deleteOne(query);
             res.send(result);
         });
 
